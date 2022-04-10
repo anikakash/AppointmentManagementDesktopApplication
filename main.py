@@ -5,5 +5,4 @@ appointments easily
 """
 
 import app
-
 run = app.App()
