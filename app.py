@@ -10,8 +10,18 @@ class App:
     def __init__(self):
         setUpGui()
 
-
 def setUpGui():
+    #necessary variables:
+    global root,favicon,helvitika,firstFrame,diuImg,diuImgLable,teacherBtn,orLabel,studentBtn,studentLoginFrame
+    global studentIdInputLable,studentIdInput,sectionInputLable,sectionInput,departmentInputLable,departmentInput
+    global studentLoginButton,teacherLoginFrame,teacherIdInputLable,teacherIdInput,departmentInputLable,departmentInput
+    global teacherLoginButton,teacherBookingsFrame,teacherBookingsFrameLabel,currentBookingBtn,upComingBtn
+    global previousBookingBtn,studentBookingFrame,studentBookingsFrameLabel,studentBooingBtn,viewBookingBtn
+    global teacherAppointmentFrame,teacherAppointmentFrameLabel,studentBookAppointmentFrame,facultytIdLabel
+    global facultytIdInput,appointmentDateLabel,timePickerLable,timePickerInput,submitBtn
+    global studentLoginFrameBackBtn
+
+
     #Setting root window:
     root = Tk()
     root.geometry("400x600+450+50")
@@ -26,7 +36,7 @@ def setUpGui():
 
     # Welcome Screen Code:
     firstFrame = Frame(root, width=400, height=600)
-    firstFrame.place(x=0, y=0)
+    firstFrame.pack(fill='both',expand=1)
 
     # Adding DIU logo  in first frame
     diuImg = ImageTk.PhotoImage(Image.open("./assets/diuLogo.png"))
@@ -34,16 +44,18 @@ def setUpGui():
     diuImgLable.place(x=150, y=50)
 
     # Adding buttons and text in first frame
-    teacherBtn = Button(firstFrame, text="Teacher", padx=8, pady=5, bg='green', fg='#0052cc', font=helvitika)
+    teacherBtn = Button(firstFrame, text="Teacher", padx=8, pady=5, bg='green', fg='#0052cc', font=helvitika,
+                        command=showteacherLoginframe)
     teacherBtn.place(x=150, y=250)
     orLabel = Label(firstFrame, text="OR", fg='red', font=helvitika)
     orLabel.place(x=185, y=310)
-    studentBtn = Button(firstFrame, text="Student", padx=8, pady=5, bg='#0052cc', fg='green', font=helvitika)
+    studentBtn = Button(firstFrame, text="Student", padx=8, pady=5, bg='#0052cc', fg='green', font=helvitika,
+                        command=showstudentLoginFrame)
     studentBtn.place(x=150, y=350)
 
     #Student Login Frame Code
     studentLoginFrame = Frame(root, width=400, height=600)
-    studentLoginFrame.place(x=0, y=0)
+    #studentLoginFrame.place(x=0, y=0)
 
     # Adding input area, lables & button
     studentIdInputLable = Label(studentLoginFrame, text="Your Student id:", fg='black', font=helvitika)
@@ -64,12 +76,16 @@ def setUpGui():
     departmentInput = Entry(studentLoginFrame,font=helvitika)
     departmentInput.place(x=50, y=290, width=300, height=30)
 
-    studentLoginButton = Button(studentLoginFrame,text="Login",bg='#0052cc',fg='white',font=helvitika)
+    studentLoginButton = Button(studentLoginFrame,text="Login",bg='#0052cc',fg='white',font=helvitika,
+                                command=showstudentBookingFrame)
     studentLoginButton.place(x=100,y=400,width=200,height=40)
+
+    studentLoginFrameBackBtn = Button(studentLoginFrame,text="Back",bg='red',fg='white',command=backtowelcome)
+    studentLoginFrameBackBtn.place(x=0,y=0)
 
     #Teacher Login frame code:
     teacherLoginFrame = Frame(root, width=400, height=600)
-    teacherLoginFrame.place(x=0, y=0)
+    #teacherLoginFrame.place(x=0, y=0)
 
     # Adding input area, lables & button
     teacherIdInputLable = Label(teacherLoginFrame, text="Your Employee id:", fg='black', font=helvitika)
@@ -84,12 +100,15 @@ def setUpGui():
     departmentInput = Entry(teacherLoginFrame, font=helvitika)
     departmentInput.place(x=50, y=220, width=300, height=30)
 
-    teacherLoginButton = Button(teacherLoginFrame, text="Login", bg='#0052cc', fg='white', font=helvitika)
+    teacherLoginButton = Button(teacherLoginFrame, text="Login", bg='#0052cc', fg='white', font=helvitika,command=showteacherBookingsFrame)
     teacherLoginButton.place(x=100, y=300, width=200, height=40)
+
+    teacherLoginFrameBackBtn = Button(teacherLoginFrame,text="Back",bg='red',fg='white',command=backtowelcome)
+    teacherLoginFrameBackBtn.place(x=0,y=0)
 
     # Teacher's Bookings frame code:
     teacherBookingsFrame = Frame(root, width=400, height=600)
-    teacherBookingsFrame.place(x=0, y=0)
+    #teacherBookingsFrame.place(x=0, y=0)
 
     # Adding labels & buttons in Teachers Bookings frame :
     teacherBookingsFrameLabel = Label(teacherBookingsFrame,text="Teacher Appointments",fg="#2e86de",font=helvitika)
@@ -104,9 +123,12 @@ def setUpGui():
     previousBookingBtn = Button(teacherBookingsFrame,text="Previous Bookings",bg="#222f3e",fg="#f5f6fa",font=helvitika)
     previousBookingBtn.place(x=100, y=310, width=200, height=40)
 
+    teacherBookingsFrameBackBtn = Button(teacherBookingsFrame,text="Back",bg='red',fg='white',command=backtoteacherlogin)
+    teacherBookingsFrameBackBtn.place(x=0,y=0)
+
     #Adding Students Booking Frame code:
     studentBookingFrame = Frame(root, width=400, height=600)
-    studentBookingFrame.place(x=0, y=0)
+    #studentBookingFrame.place(x=0, y=0)
 
     #Adding Labels & buttons in Students Booking Frame :
     studentBookingsFrameLabel = Label(studentBookingFrame,text="Students Appointment Booking",fg='#2ecc71',font=helvitika)
@@ -114,22 +136,27 @@ def setUpGui():
 
     # Adding labels & buttons in Teachers Bookings frame :
     studentBooingBtn = Button(studentBookingFrame, text="Book An Appointment", bg='#2ecc71', fg='#f5f6fa',
-                              font=helvitika)
+                              font=helvitika,command=showstudentBookAppointmentFrame)
     studentBooingBtn.place(x=90, y=150, width=220, height=40)
 
     viewBookingBtn = Button(studentBookingFrame,text="View your bookings",bg="#e74c3c",fg="#f5f6fa",font=helvitika)
     viewBookingBtn.place(x=90, y=220, width=220, height=40)
 
+    studentBookingFrameBackBtn = Button(studentBookingFrame,text="Back",bg='red',fg='white',command=backtostudentlogin)
+    studentBookingFrameBackBtn.place(x=0,y=0)
+
     #Teacher Appontments Frame code:
     teacherAppointmentFrame = Frame(root, width=400, height=600)
-    teacherAppointmentFrame.place(x=0, y=0)
+    #teacherAppointmentFrame.place(x=0, y=0)
 
     teacherAppointmentFrameLabel = Label(teacherAppointmentFrame,text="Your Appointments",fg="#e74c3c",font=helvitika)
     teacherAppointmentFrameLabel.place(x=110,y=50)
 
+    ###############################################
+
     #Student Book Appointments Frame code:
     studentBookAppointmentFrame = Frame(root, width=400, height=600)
-    studentBookAppointmentFrame.place(x=0, y=0)
+    #studentBookAppointmentFrame.place(x=0, y=0)
 
     #Adding label , button , input feilds in Student Book Appointments Frame
     facultytIdLabel = Label(studentBookAppointmentFrame,text="Faculty ID :",font=helvitika)
@@ -153,4 +180,45 @@ def setUpGui():
     submitBtn = Button(studentBookAppointmentFrame,text="Book",bg="#2ecc71",fg="#ffffff",font=helvitika)
     submitBtn.place(x=100, y=400, width=220, height=40)
 
+    studentBookAppointmentFrameBackBtn = Button(studentBookAppointmentFrame,text="Back",bg='red',fg='white',
+                                                command=backtostudentBookingFrame)
+    studentBookAppointmentFrameBackBtn.place(x=0,y=0)
+
     root.mainloop()
+
+def showteacherLoginframe():
+    teacherLoginFrame.pack(fill='both',expand=1)
+    firstFrame.forget()
+
+def showteacherBookingsFrame():
+    teacherLoginFrame.forget()
+    teacherBookingsFrame.pack(fill='both',expand=1)
+
+def showstudentLoginFrame():
+    firstFrame.forget()
+    studentLoginFrame.pack(fill='both',expand=1)
+
+def showstudentBookingFrame():
+    studentLoginFrame.forget()
+    studentBookingFrame.pack(fill='both',expand=1)
+
+def showstudentBookAppointmentFrame():
+    studentBookAppointmentFrame.pack(fill='both',expand=1)
+    studentBookingFrame.forget()
+
+def backtowelcome():
+    firstFrame.pack(fill='both',expand=1)
+    studentLoginFrame.forget()
+    teacherLoginFrame.forget()
+
+def backtoteacherlogin():
+    teacherLoginFrame.pack(fill='both',expand=1)
+    teacherBookingsFrame.forget()
+
+def backtostudentlogin():
+    studentLoginFrame.pack(fill='both',expand=1)
+    studentBookingFrame.forget()
+
+def backtostudentBookingFrame():
+    studentBookAppointmentFrame.forget()
+    studentBookingFrame.pack(fill='both',expand=1)
