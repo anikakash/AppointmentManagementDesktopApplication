@@ -3,7 +3,9 @@ from PIL import ImageTk, Image
 import tkinter.font as font
 from tkcalendar import Calendar, DateEntry
 from datetime import date
+from datetime import time
 
+from authentication import authentication
 
 
 class App:
@@ -13,13 +15,13 @@ class App:
 def setUpGui():
     #necessary variables:
     global root,favicon,helvitika,firstFrame,diuImg,diuImgLable,teacherBtn,orLabel,studentBtn,studentLoginFrame
-    global studentIdInputLable,studentIdInput,sectionInputLable,sectionInput,departmentInputLable,departmentInput
+    global studentIdInputLable,studentIdInput,sectionInputLable,sectionInput,departmentInputLable,departmentInput_student
     global studentLoginButton,teacherLoginFrame,teacherIdInputLable,teacherIdInput,departmentInputLable,departmentInput
     global teacherLoginButton,teacherBookingsFrame,teacherBookingsFrameLabel,currentBookingBtn,upComingBtn
     global previousBookingBtn,studentBookingFrame,studentBookingsFrameLabel,studentBooingBtn,viewBookingBtn
     global teacherAppointmentFrame,teacherAppointmentFrameLabel,studentBookAppointmentFrame,facultytIdLabel
     global facultytIdInput,appointmentDateLabel,timePickerLable,timePickerInput,submitBtn
-    global studentLoginFrameBackBtn
+    global studentLoginFrameBackBtn, studentId, appointmentDatePicker
 
 
     #Setting root window:
@@ -73,8 +75,8 @@ def setUpGui():
     departmentInputLable = Label(studentLoginFrame,text="Department:",font=helvitika)
     departmentInputLable.place(x=50,y=260)
 
-    departmentInput = Entry(studentLoginFrame,font=helvitika)
-    departmentInput.place(x=50, y=290, width=300, height=30)
+    departmentInput_student = Entry(studentLoginFrame,font=helvitika)
+    departmentInput_student.place(x=50, y=290, width=300, height=30)
 
     studentLoginButton = Button(studentLoginFrame,text="Login",bg='#0052cc',fg='white',font=helvitika,
                                 command=showstudentBookingFrame)
@@ -100,7 +102,8 @@ def setUpGui():
     departmentInput = Entry(teacherLoginFrame, font=helvitika)
     departmentInput.place(x=50, y=220, width=300, height=30)
 
-    teacherLoginButton = Button(teacherLoginFrame, text="Login", bg='#0052cc', fg='white', font=helvitika,command=showteacherBookingsFrame)
+    teacherLoginButton = Button(teacherLoginFrame, text="Login", bg='#0052cc', fg='white', font=helvitika,
+                                command=showteacherBookingsFrame)
     teacherLoginButton.place(x=100, y=300, width=200, height=40)
 
     teacherLoginFrameBackBtn = Button(teacherLoginFrame,text="Back",bg='red',fg='white',command=backtowelcome)
@@ -177,12 +180,14 @@ def setUpGui():
     timePickerInput = Entry(studentBookAppointmentFrame,font=helvitika)
     timePickerInput.place(x=50, y=340, width=300, height=30)
 
-    submitBtn = Button(studentBookAppointmentFrame,text="Book",bg="#2ecc71",fg="#ffffff",font=helvitika)
+    submitBtn = Button(studentBookAppointmentFrame,text="Book",bg="#2ecc71",fg="#ffffff",font=helvitika,
+                       command=addappointment)
     submitBtn.place(x=100, y=400, width=220, height=40)
 
     studentBookAppointmentFrameBackBtn = Button(studentBookAppointmentFrame,text="Back",bg='red',fg='white',
                                                 command=backtostudentBookingFrame)
     studentBookAppointmentFrameBackBtn.place(x=0,y=0)
+
 
     root.mainloop()
 
@@ -191,6 +196,10 @@ def showteacherLoginframe():
     firstFrame.forget()
 
 def showteacherBookingsFrame():
+    print(teacherIdInput.get())
+    print(departmentInput.get())
+    auth=authentication()
+    teacher_test = auth.authenticate_employee(teacherIdInput.get(), departmentInput.get())
     teacherLoginFrame.forget()
     teacherBookingsFrame.pack(fill='both',expand=1)
 
@@ -199,8 +208,21 @@ def showstudentLoginFrame():
     studentLoginFrame.pack(fill='both',expand=1)
 
 def showstudentBookingFrame():
-    studentLoginFrame.forget()
-    studentBookingFrame.pack(fill='both',expand=1)
+    # print(studentIdInput.get())
+    # print(sectionInput.get())
+    # print(departmentInput_student.get())
+    auth=authentication()
+    try:
+        student_test = auth.authenticate_student(studentIdInput.get(),sectionInput.get(), departmentInput_student.get())
+        # print(student_test)
+        studentId=student_test[0]
+        # print(studentId)
+        studentLoginFrame.forget()
+        studentBookingFrame.pack(fill='both',expand=1)
+    except Exception as e:
+        print("Pai nai")
+
+
 
 def showstudentBookAppointmentFrame():
     studentBookAppointmentFrame.pack(fill='both',expand=1)
@@ -222,3 +244,7 @@ def backtostudentlogin():
 def backtostudentBookingFrame():
     studentBookAppointmentFrame.forget()
     studentBookingFrame.pack(fill='both',expand=1)
+
+def addappointment():
+    print(appointmentDatePicker.get_date())
+
